@@ -34,7 +34,8 @@ export class EditOrderComponent {
       }, error => {
         console.error('Erro ao atualizar o pedido', error);
       });
-  }
+  } 
+  
 
   onStreetChange(newStreetValue: string): void {
     if (!this.data.address) {
