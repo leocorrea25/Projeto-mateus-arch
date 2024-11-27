@@ -1,0 +1,79 @@
+<mat-dialog-content>
+    <form>
+        <!-- Opção de Entrega -->
+        <div class="mb-4">
+            <label class="block font-medium text-gray-700 mb-2">Opção de entrega:</label>
+            <mat-radio-group [(ngModel)]="data.deliveryOption" name="deliveryOption">
+                <mat-radio-button value="entrega" class="mr-4">Entrega</mat-radio-button>
+                <mat-radio-button value="retirada">Retirada</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <!-- Quantidade -->
+        <div class="mb-4">
+            <label class="block font-medium text-gray-700 mb-2">Quantidade de rolos:</label>
+            <input type="number" [(ngModel)]="data.quantity" name="quantity" min="1"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2" />
+        </div>
+
+        <!-- Endereço de Entrega (aparece apenas se 'entrega' for selecionado) -->
+        <div *ngIf="data.deliveryOption === 'entrega'" class="mb-4 bg-gray-100 border border-blue-300 rounded p-4">
+            <h3 class="font-semibold mb-2 text-blue-600">Endereço de Entrega:</h3>
+            <input type="text" [(ngModel)]="data.address.street" name="street" placeholder="Rua"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2 mb-2" />
+            <input type="text" [(ngModel)]="data.address.city" name="city" placeholder="Cidade"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2 mb-2" />
+            <input type="text" [(ngModel)]="data.address.postalCode" name="postalCode" placeholder="CEP"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2" />
+        </div>
+
+        <!-- Local de Retirada (aparece apenas se 'retirada' for selecionado) -->
+        <div *ngIf="data.deliveryOption === 'retirada'" class="mb-4 bg-gray-100 border border-blue-300 rounded p-4">
+            <label class="block font-medium text-gray-700 mb-2">Local de Retirada:</label>
+            <select [(ngModel)]="data.pickupLocation" name="pickupLocation"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2">
+                <option value="" disabled>Escolha um local</option>
+                <option value="Loja 1">Loja 1</option>
+                <option value="Loja 2">Loja 2</option>
+                <option value="Loja 3">Loja 3</option>
+            </select>
+        </div>
+
+        <!-- Informações de Contato -->
+        <div class="mb-4 bg-gray-100 border border-blue-300 rounded p-4">
+            <h3 class="font-semibold mb-2 text-blue-600">Informações de Contato:</h3>
+            <input type="text" [(ngModel)]="data.contactName" name="contactName" placeholder="Nome"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2 mb-2" />
+            <input type="tel" [(ngModel)]="data.contactPhone" name="contactPhone" placeholder="Telefone"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2 mb-2" />
+            <input type="email" [(ngModel)]="data.contactEmail" name="contactEmail" placeholder="Email"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2" />
+        </div>
+
+        <!-- Data Preferida -->
+        <div class="mb-4 bg-gray-100 border border-blue-300 rounded p-4">
+            <label class="block font-medium text-gray-700 mb-2">Data Preferida:</label>
+            <input type="date" [(ngModel)]="data.preferredDate" name="preferredDate"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2 mb-2" />
+        </div>
+
+        <!-- Instruções Adicionais -->
+        <div class="mb-4 bg-gray-100 border border-blue-300 rounded p-4">
+            <label class="block font-medium text-gray-700 mb-2">Instruções Adicionais:</label>
+            <textarea [(ngModel)]="data.additionalInstructions" name="additionalInstructions" rows="3"
+                class="border border-gray-500 focus:border-blue-600 focus:ring focus:ring-blue-200 rounded w-full p-2"></textarea>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex justify-center gap-4">
+    <button mat-button (click)="onNoClick()" 
+        class="border border-gray-300 text-gray-700 hover:bg-gray-100 px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+        Cancelar
+    </button>
+    <button mat-button (click)="onSave()" 
+        class="border border-blue-500 text-blue-500 hover:bg-blue-100 px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+        Salvar
+    </button>
+</mat-dialog-actions>
+
