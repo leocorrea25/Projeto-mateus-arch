@@ -11,11 +11,11 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
-import { SchedulingComponent } from './modules/admin/scheduling/scheduling.component';
-import { CounterComponent } from './modules/admin/counter/counter.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { CreateProductsComponent } from './modules/admin/create-products/create-products.component';
+import { MyProductsComponent } from './modules/admin/my-products/my-products.component';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -28,7 +28,6 @@ const routerConfig: ExtraOptions = {
     ],
     imports: [
         BrowserModule,
-        BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
 
         // Fuse, FuseConfig & FuseMockAPI

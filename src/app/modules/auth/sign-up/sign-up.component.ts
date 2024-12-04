@@ -4,19 +4,19 @@ import { Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import { crateUserRequest } from 'app/shared/request/create-user.request';
 
 @Component({
-    selector     : 'auth-sign-up',
-    templateUrl  : './sign-up.component.html',
+    selector: 'auth-sign-up',
+    templateUrl: './sign-up.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations
 })
-export class AuthSignUpComponent implements OnInit
-{
+export class AuthSignUpComponent implements OnInit {
     @ViewChild('signUpNgForm') signUpNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
-        type   : 'success',
+        type: 'success',
         message: ''
     };
     signUpForm: UntypedFormGroup;
@@ -29,9 +29,7 @@ export class AuthSignUpComponent implements OnInit
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
         private _router: Router
-    )
-    {
-    }
+    ) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -40,65 +38,66 @@ export class AuthSignUpComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
-        // Create the form
+    ngOnInit(): void {
+        // Criação do formulário com os campos adicionais
         this.signUpForm = this._formBuilder.group({
-                name      : ['', Validators.required],
-                email     : ['', [Validators.required, Validators.email]],
-                password  : ['', Validators.required],
-                company   : [''],
-                agreements: ['', Validators.requiredTrue]
+            name: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required],
+            phoneNumber: ['', Validators.required],
+            isSeller: [false, Validators.required],
+            postalCodeAddress: ['', Validators.required],
+            numberAddress: ['', Validators.required],
+            street: ['', Validators.required],
+            city: ['', Validators.required],
+            agreements: ['', Validators.requiredTrue]
+        });
+    }
+    
+    signUp(): void {
+    
+        // Criação do objeto user a partir do formulário
+        let user: crateUserRequest = {
+            name: this.signUpForm.get('name')?.value,
+            email: this.signUpForm.get('email')?.value,
+            password: this.signUpForm.get('password')?.value,
+            phoneNumber: this.signUpForm.get('phoneNumber')?.value,
+            isSeller: this.signUpForm.get('isSeller')?.value,
+            postalCodeAddress: this.signUpForm.get('postalCodeAddress')?.value,
+            numberAddress: this.signUpForm.get('numberAddress')?.value,
+            street: this.signUpForm.get('street')?.value,
+            city: this.signUpForm.get('city')?.value
+        };
+    
+        // Desabilita o formulário enquanto o processo de cadastro está em andamento
+        this.signUpForm.disable();
+    
+        // Oculta o alerta
+        this.showAlert = false;
+    
+        // Chama o serviço de sign up passando o objeto user
+        this._authService.signUp(user).subscribe(
+            (response) => {
+                // Navega para a página de confirmação
+                this._router.navigateByUrl('/confirmation-required');
+            },
+            (error) => {
+                // Reabilita o formulário
+                this.signUpForm.enable();
+    
+                // Reseta o formulário
+                this.signUpNgForm.resetForm();
+    
+                // Define o alerta de erro
+                this.alert = {
+                    type: 'error',
+                    message: error?.message || 'Something went wrong, please try again.'
+                };
+    
+                // Exibe o alerta
+                this.showAlert = true;
             }
         );
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Sign up
-     */
-    signUp(): void
-    {
-        // Do nothing if the form is invalid
-        if ( this.signUpForm.invalid )
-        {
-            return;
-        }
-
-        // Disable the form
-        this.signUpForm.disable();
-
-        // Hide the alert
-        this.showAlert = false;
-
-        // Sign up
-        this._authService.signUp(this.signUpForm.value)
-            .subscribe(
-                (response) => {
-
-                    // Navigate to the confirmation required page
-                    this._router.navigateByUrl('/confirmation-required');
-                },
-                (response) => {
-
-                    // Re-enable the form
-                    this.signUpForm.enable();
-
-                    // Reset the form
-                    this.signUpNgForm.resetForm();
-
-                    // Set the alert
-                    this.alert = {
-                        type   : 'error',
-                        message: 'Something went wrong, please try again.'
-                    };
-
-                    // Show the alert
-                    this.showAlert = true;
-                }
-            );
-    }
+    
 }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { CounterComponent } from './counter.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -11,17 +10,18 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
+import { ClientOrdersComponent } from './client-orders.component';
 
 const counterRoutes: Route[] = [
     {
         path: '',
-        component: CounterComponent
+        component: ClientOrdersComponent
     }
 ];
 
 @NgModule({
     declarations: [
-        CounterComponent
+      ClientOrdersComponent
     ],
     imports: [
         CommonModule,
@@ -35,4 +35,4 @@ const counterRoutes: Route[] = [
         MatIconModule,MatRadioModule
     ]
 })
-export class CounterModule {}
+export class ClientOrdersModule {}

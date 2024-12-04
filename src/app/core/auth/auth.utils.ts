@@ -57,7 +57,7 @@ export class AuthUtils
      * @param str
      * @private
      */
-    private static _b64decode(str: string): string
+    public static _b64decode(str: string): string
     {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
         let output = '';
@@ -103,7 +103,7 @@ export class AuthUtils
      * @param str
      * @private
      */
-    private static _b64DecodeUnicode(str: any): string
+    public static _b64DecodeUnicode(str: any): string
     {
         return decodeURIComponent(
             Array.prototype.map
@@ -118,7 +118,7 @@ export class AuthUtils
      * @param str
      * @private
      */
-    private static _urlBase64Decode(str: string): string
+    public static _urlBase64Decode(str: string): string
     {
         let output = str.replace(/-/g, '+').replace(/_/g, '/');
         switch ( output.length % 4 )
@@ -151,7 +151,7 @@ export class AuthUtils
      * @param token
      * @private
      */
-    private static _decodeToken(token: string): any
+    public static _decodeToken(token: string): any
     {
         // Return if there is no token
         if ( !token )
@@ -184,7 +184,7 @@ export class AuthUtils
      * @param token
      * @private
      */
-    private static _getTokenExpirationDate(token: string): Date | null
+    public static _getTokenExpirationDate(token: string): Date | null
     {
         // Get the decoded token
         const decodedToken = this._decodeToken(token);

@@ -1,12 +1,12 @@
-<div class="mat-elevation-z8 p-4 md:p-6">
+<div class="flex flex-col flex-auto min-w-0"> <!-- Ajuste para a altura da tela -->
   <mat-form-field appearance="outline" class="mb-4 w-full">
     <mat-label>Filtrar</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar pedidos" class="w-full">
   </mat-form-field>
 
-  <div class="overflow-x-auto">
-    <table mat-table [dataSource]="dataSource" class="mat-table w-full table-auto">
-
+  <div class="overflow-x-auto h-full"> <!-- Ajuste para a altura ocupar o restante da tela -->
+    <table mat-table [dataSource]="dataSource" class="mat-table w-full table-auto h-full"> <!-- Tabela com altura total -->
+      
       <!-- Delivery Option Column -->
       <ng-container matColumnDef="deliveryOption">
         <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Opção de Entrega </th>
@@ -15,72 +15,22 @@
 
       <!-- Quantity Column -->
       <ng-container matColumnDef="quantity">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Quantidade de rolos </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.quantity }} </td>
-      </ng-container>
-
-      <!-- Address Column -->
-      <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Endereço </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2">
-          <span *ngIf="pedido.deliveryOption === 'entrega'">
-            {{ pedido.address?.street }}, {{ pedido.address?.city }} - {{ pedido.address?.postalCode }}
-          </span>
-          <span *ngIf="pedido.deliveryOption === 'retirada'">N/A</span>
-        </td>
-      </ng-container>
-
-      <!-- Pickup Location Column -->
-      <ng-container matColumnDef="pickupLocation">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Horário de Retirada </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2">
-          <span *ngIf="pedido.deliveryOption === 'retirada'">{{ pedido.pickupLocation }}</span>
-          <span *ngIf="pedido.deliveryOption === 'entrega'">N/A</span>
-        </td>
-      </ng-container>
-
-      <!-- Other Columns -->
-      <ng-container matColumnDef="contactName">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Nome </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.contactName }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="contactPhone">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Telefone </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.contactPhone }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="contactEmail">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Email </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.contactEmail }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="preferredDate">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Data Preferida </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.preferredDate }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="preferredTime">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Hora Preferida </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.preferredTime }} </td>
+        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Quantidade </th>
+        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.productQuantity }} </td>
       </ng-container>
 
       <ng-container matColumnDef="additionalInstructions">
         <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Instruções </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.additionalInstructions }} </td>
+        <td mat-cell *matCellDef="let pedido" class="px-4 py-2"> {{ pedido.additionalInstructions }}
+          </td>
       </ng-container>
 
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="px-4 py-2 text-left"> Ações </th>
-        <td mat-cell *matCellDef="let pedido" class="px-4 py-2 flex space-x-2">
-          <button mat-icon-button *ngIf="!pedido.isCompleted" (click)="openModal(pedido)">
-            <mat-icon>edit</mat-icon>
-          </button>
+      <ng-container  matColumnDef="finish">
+        <th mat-header-cell  *matHeaderCellDef class="px-4 py-2 text-left"> Entrega  </th>
+        <td mat-cell *matCellDef="let pedido" class="px-4 py-2">  
           <button mat-icon-button *ngIf="!pedido.isCompleted" (click)="confirmPedido(pedido)">
-            <mat-icon>check_circle</mat-icon>
-          </button>
-        </td>
+          <mat-icon>check_circle</mat-icon>
+        </button> </td>
       </ng-container>
 
       <!-- Header and Rows -->
@@ -89,5 +39,5 @@
     </table>
   </div>
 
-  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showiFrstLastButtons class="mt-4"></mat-paginator>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="mt-4"></mat-paginator>
 </div>

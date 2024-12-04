@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ApiService } from 'app/services/services/api.service';
-import { EditOrderComponent } from './edit-order/edit-order.component';
+import { OrderService } from 'app/services/services/orders.service';
+import { UserServiceApi } from 'app/services/user.service';
 
 export interface Pedido {
   id?: number,
@@ -33,21 +33,14 @@ export class CounterComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'deliveryOption',
     'quantity',
-    'address',
-    'pickupLocation',
-    'contactName',
-    'contactPhone',
-    'contactEmail',
-    'preferredDate',
-    'preferredTime',
     'additionalInstructions',
-    'actions'
+    'finish'
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) { }
+  constructor(private apiService: OrderService, public dialog: MatDialog, public userServiceApi: UserServiceApi) { }
 
   ngOnInit(): void {
     this.fetchOrders();
@@ -61,6 +54,8 @@ export class CounterComponent implements OnInit, AfterViewInit {
   fetchOrders(): void {
     this.apiService.getAllOrders().subscribe({
       next: (data: Pedido[]) => {
+        console.log(data);
+        let user
         this.orders = data;
         this.dataSource.data = this.orders; // Atualizando o dataSource com os dados recebidos
         console.log('Ordens:', this.orders);
@@ -78,18 +73,6 @@ export class CounterComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openModal(pedido: Pedido): void {
-    const dialogRef = this.dialog.open(EditOrderComponent, {
-      width: '1200px',
-      data: pedido // Passa os dados do pedido para a modal
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      // Lógica após fechar a modal, se necessário
-      console.log('Modal fechada', result);
-      window.location.reload();
-    });
-  }
 
   confirmPedido(pedido: Pedido) {
     console.log(pedido);

@@ -6,7 +6,7 @@ import { environment } from 'enviroments/enviroments';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiService {
+export class OrderService {
   private baseUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -19,6 +19,7 @@ export class ApiService {
   createOrder(order: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/api/Order`, order);
   }
+
 
   /**
    * Faz uma requisição GET para obter uma ordem específica pelo ID.
@@ -34,7 +35,7 @@ export class ApiService {
    * @returns Um Observable com a lista de ordens.
    */
   getAllOrders(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/api/Order`);
+    return this.http.get<any[]>(`${this.baseUrl}/api/Order/user-Orders`);
   }
 
   /**

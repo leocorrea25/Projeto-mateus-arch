@@ -4,65 +4,95 @@ import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 
-// @formatter:off
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
+    // Redireciona o caminho vazio para 'Compra'
+    { path: '', pathMatch: 'full', redirectTo: 'Inicio' },
 
-    // Redirect empty path to '/example'
-    {path: '', pathMatch : 'full', redirectTo: 'Compra'},
+    // Redireciona o usuário logado para 'Compra' após o login
+    { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: 'Inicio' },
 
-    // Redirect signed-in user to the '/example'
-    //
-    // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
-    // path. Below is another redirection for that path to redirect the user to the desired
-    // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'Compra'},
-
-    // Auth routes for guests
+    // Rotas para usuários não autenticados
     {
         path: '',
         canMatch: [NoAuthGuard],
         component: LayoutComponent,
         data: {
-            layout: 'empty'
+            layout: 'empty',
         },
         children: [
-            {path: 'confirmation-required', loadChildren: () => import('app/modules/auth/confirmation-required/confirmation-required.module').then(m => m.AuthConfirmationRequiredModule)},
-            {path: 'forgot-password', loadChildren: () => import('app/modules/auth/forgot-password/forgot-password.module').then(m => m.AuthForgotPasswordModule)},
-            {path: 'reset-password', loadChildren: () => import('app/modules/auth/reset-password/reset-password.module').then(m => m.AuthResetPasswordModule)},
-            {path: 'sign-in', loadChildren: () => import('app/modules/auth/sign-in/sign-in.module').then(m => m.AuthSignInModule)},
-            {path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.module').then(m => m.AuthSignUpModule)}
-        ]
+            {
+                path: 'confirmation-required',
+                loadChildren: () =>
+                    import('app/modules/auth/confirmation-required/confirmation-required.module').then(
+                        (m) => m.AuthConfirmationRequiredModule
+                    ),
+            },
+            {
+                path: 'forgot-password',
+                loadChildren: () =>
+                    import('app/modules/auth/forgot-password/forgot-password.module').then(
+                        (m) => m.AuthForgotPasswordModule
+                    ),
+            },
+            {
+                path: 'reset-password',
+                loadChildren: () =>
+                    import('app/modules/auth/reset-password/reset-password.module').then(
+                        (m) => m.AuthResetPasswordModule
+                    ),
+            },
+            {
+                path: 'sign-in',
+                loadChildren: () =>
+                    import('app/modules/auth/sign-in/sign-in.module').then((m) => m.AuthSignInModule),
+            },
+            {
+                path: 'sign-up',
+                loadChildren: () =>
+                    import('app/modules/auth/sign-up/sign-up.module').then((m) => m.AuthSignUpModule),
+            },
+        ],
     },
 
-    // Auth routes for authenticated users
+    // Rotas para usuários autenticados
     {
         path: '',
         canMatch: [AuthGuard],
         component: LayoutComponent,
         data: {
-            layout: 'empty'
+            layout: 'empty',
         },
         children: [
-            {path: 'sign-out', loadChildren: () => import('app/modules/auth/sign-out/sign-out.module').then(m => m.AuthSignOutModule)},
-            {path: 'unlock-session', loadChildren: () => import('app/modules/auth/unlock-session/unlock-session.module').then(m => m.AuthUnlockSessionModule)}
-        ]
+            {
+                path: 'sign-out',
+                loadChildren: () =>
+                    import('app/modules/auth/sign-out/sign-out.module').then((m) => m.AuthSignOutModule),
+            },
+            {
+                path: 'unlock-session',
+                loadChildren: () =>
+                    import('app/modules/auth/unlock-session/unlock-session.module').then((m) => m.AuthUnlockSessionModule),
+            },
+        ],
     },
 
-    // Landing routes
+    // Rotas públicas (exemplo: Landing pages)
     {
         path: '',
         component: LayoutComponent,
         data: {
-            layout: 'empty'
+            layout: 'empty',
         },
         children: [
-            {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
-        ]
+            {
+                path: 'home',
+                loadChildren: () =>
+                    import('app/modules/landing/home/home.module').then((m) => m.LandingHomeModule),
+            },
+        ],
     },
 
-    // Admin routes
+    // Rotas para o administrador ou usuário autenticado
     {
         path: '',
         canMatch: [AuthGuard],
@@ -71,9 +101,38 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children: [
-            // {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
-            {path: 'Compra', loadChildren: () => import('app/modules/admin/scheduling/scheduling.module').then(m => m.SchedulingModule)},
-            {path: 'Balcao', loadChildren: () => import('app/modules/admin/counter/counter.module').then(m => m.CounterModule)}
-        ]
-    }
+            {
+                path: 'Inicio',
+                loadChildren: () => import('app/modules/admin/example/example.module').then((m) => m.ExampleModule),
+            },
+            {
+                path: 'Compra',
+                loadChildren: () =>
+                    import('app/modules/admin/scheduling/scheduling.module').then((m) => m.SchedulingModule),
+            },
+            {
+                path: 'Balcao',
+                loadChildren: () =>
+                    import('app/modules/admin/counter/counter.module').then((m) => m.CounterModule),
+            },
+            {
+                path: 'Pedidos',
+                loadChildren: () => 
+                    import('app/modules/admin/client-orders/client-orders.module').then((m) => m.ClientOrdersModule)
+            },
+            {
+                path: 'Criar-Produto',
+                loadChildren: () => 
+                    import('app/modules/admin/create-products/create-products.module').then((m) => m.CreateProductsModule)
+            },
+            {
+                path: 'Listar-Produtos',
+                loadChildren: () => 
+                    import('app/modules/admin/my-products/my-products.module').then((m) => m.MyProductsModule)
+            }
+        ],
+    },
+
+    // Rota coringa para lidar com 404
+    { path: '**', redirectTo: 'Inicio' },
 ];

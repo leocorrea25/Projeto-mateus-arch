@@ -3,10 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { environment } from 'enviroments/enviroments';
+import { crateUserRequest } from 'app/shared/request/create-user.request';
 
 @Injectable()
 export class AuthService
 {
+    public baseUrl = environment.apiUrl;
     private _authenticated: boolean = false;
 
     /**
@@ -65,31 +68,36 @@ export class AuthService
      *
      * @param credentials
      */
-    signIn(credentials: { email: string; password: string }): Observable<any>
-    {
-        // Throw error, if the user is already logged in
-        if ( this._authenticated )
-        {
+    signIn(credentials: { email: string; password: string }): Observable<any> {
+        console.log(credentials);
+    
+        const loginRequest: loginRequest = {
+            username: credentials.email,
+            password: credentials.password
+        };
+    
+        console.log(loginRequest);
+    
+        if (this._authenticated) {
             return throwError('User is already logged in.');
         }
-
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
-            switchMap((response: any) => {
-
-                // Store the access token in the local storage
-                this.accessToken = response.accessToken;
-
-                // Set the authenticated flag to true
-                this._authenticated = true;
-
-                // Store the user on the user service
-                this._userService.user = response.user;
-
-                // Return a new observable with the response
-                return of(response);
-            })
-        );
+    
+        return this._httpClient
+            .post(`${this.baseUrl}/api/User/login`, loginRequest)  // Atualize a URL com /api/
+            .pipe(
+                switchMap((response: any) => {
+                    this.accessToken = response.token;
+                    this._authenticated = true;
+                    this._userService.user = response.user;
+                    return of(response);
+                }),
+                catchError((error) => {
+                    console.error(error);
+                    return throwError(error);
+                })
+            );
     }
+    
 
     /**
      * Sign in using the access token
@@ -151,10 +159,13 @@ export class AuthService
      *
      * @param user
      */
-    signUp(user: { name: string; email: string; password: string; company: string }): Observable<any>
-    {
-        return this._httpClient.post('api/auth/sign-up', user);
+    signUp(user: crateUserRequest): Observable<any> {
+        const url = `${this.baseUrl}/api/User`; // Concatena a URL base com o endpoint
+        console.log(user);
+        
+        return this._httpClient.post(url, user); // Realiza o POST para a URL
     }
+    
 
     /**
      * Unlock session
@@ -192,4 +203,9 @@ export class AuthService
         // If the access token exists and it didn't expire, sign in using it
         return this.signInUsingToken();
     }
+}
+
+export interface loginRequest {
+    username: string,
+    password: string
 }

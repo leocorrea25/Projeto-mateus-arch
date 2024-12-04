@@ -253,9 +253,6 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
             // Enable the animations after a delay
             // The delay must be bigger than the current transition-duration
             // to make sure nothing will be animated while the mode changing
-            setTimeout(() => {
-                this._enableAnimations();
-            }, 500);
         }
 
         // Navigation

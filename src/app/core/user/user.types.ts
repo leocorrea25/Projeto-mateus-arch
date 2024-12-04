@@ -1,8 +1,6 @@
 export interface User
 {
-    id: string;
-    name: string;
+    nameid: string;
     email: string;
-    avatar?: string;
-    status?: string;
+    saller: boolean;
 }
